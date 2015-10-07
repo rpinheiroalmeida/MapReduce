@@ -1,10 +1,10 @@
-package com.aamend.hadoop.MapReduce;
+package br.com.unb.hadoop;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -14,10 +14,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-import com.aamend.hadoop.MapReduce.WordCountMapper;
-import com.aamend.hadoop.MapReduce.WordCountReducer;
-
-public class WordCount  extends Configured implements Tool {
+public class BeneficiosPagosEstadoDriver  extends Configured implements Tool {
 
 	@Override
 	public int run(String[] args) throws Exception {
@@ -29,16 +26,16 @@ public class WordCount  extends Configured implements Tool {
 
 		// Create job
 		Job job = new Job(conf, "BeneficiosPagosEstadoDriver");
-		job.setJarByClass(WordCount.class);
+		job.setJarByClass(BeneficiosPagosEstadoDriver.class);
 
 		// Setup MapReduce
-		job.setMapperClass(WordCountMapper.class);
-		job.setReducerClass(WordCountReducer.class);
+		job.setMapperClass(BeneficiosPagosEstadoMapper.class);
+		job.setReducerClass(BeneficiosPagosEstadoReducer.class);
 		job.setNumReduceTasks(1);
 
 		// Specify key / value
 		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(IntWritable.class);
+		job.setOutputValueClass(DoubleWritable.class);
 
 		// Input
 		FileInputFormat.addInputPath(job, inputPath);
@@ -60,7 +57,7 @@ public class WordCount  extends Configured implements Tool {
 	}
 
 	public static void main(String[] args) throws Exception {
-		WordCount driver = new WordCount();
+		BeneficiosPagosEstadoDriver driver = new BeneficiosPagosEstadoDriver();
 		int exitCode = ToolRunner.run(driver, args);
 		System.exit(exitCode);
 	}
