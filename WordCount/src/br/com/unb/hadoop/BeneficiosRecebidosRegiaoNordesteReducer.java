@@ -2,16 +2,17 @@ package br.com.unb.hadoop;
 
 import java.io.IOException;
 
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
 
-public class MunicipioMaisRecebeuBeneficiosReducer extends Reducer<Text, CompositeWritable, Text, CompositeWritable> {
+public class BeneficiosRecebidosRegiaoNordesteReducer extends Reducer<Text, CompositeWritable, Text, DoubleWritable> {
 
-	int max =0;
-	Text maxWord = new Text();
+//	int max =0;
+//	Text maxWord = new Text();
 	
-	double maxSum = 0d;
+//	double maxSum = 0d;
 	
 	public void reduce(Text text, Iterable<CompositeWritable> values, Context context)
 			throws IOException, InterruptedException {
@@ -22,19 +23,20 @@ public class MunicipioMaisRecebeuBeneficiosReducer extends Reducer<Text, Composi
 			count += value.count;
 			sum += value.valor;
 		}
-		if(count > max)
-        {
-            max = count;
-            maxSum = sum;
-            maxWord.set(text);
-        }
+		context.write(text, new DoubleWritable(sum/count));
+//		if(count > max)
+//        {
+//            max = count;
+//            maxSum = sum;
+//            maxWord.set(text);
+//        }
 //		context.write(text, new IntWritable(sum));
 	}
 
-	@Override
-	protected void cleanup(Context context) throws IOException, InterruptedException {
-		context.write(maxWord, new CompositeWritable(max, maxSum));
-	}
+//	@Override
+//	protected void cleanup(Context context) throws IOException, InterruptedException {
+//		context.write(maxWord, new CompositeWritable(max, maxSum));
+//	}
 }
 
 
